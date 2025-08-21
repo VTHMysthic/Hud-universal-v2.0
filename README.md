@@ -134,21 +134,38 @@ gearMove.Position = UDim2.new(1, -45, 0, 5)
 
 -- Interface de movimentação
 local arrowButtons = {}
+local arrowSize = 40
+local spacing = 10 -- distância entre setas
+
+local centerX = 0.5
+local centerY = 0.5
+
 local function createArrow(parent, direction)
     local arrow = Instance.new("TextButton")
-    arrow.Size = UDim2.new(0, 40, 0, 40)
-    arrow.Position = UDim2.new(0.5, 0, 0.5, 0)
-    arrow.AnchorPoint = Vector2.new(0.5,0.5)
+    arrow.Size = UDim2.new(0, arrowSize, 0, arrowSize)
+    arrow.AnchorPoint = Vector2.new(0.5, 0.5)
+
+    local offsetX, offsetY = 0, 0
+    if direction == "up" then
+        offsetY = -(arrowSize + spacing)
+        arrow.Text = "▲"
+    elseif direction == "down" then
+        offsetY = arrowSize + spacing
+        arrow.Text = "▼"
+    elseif direction == "left" then
+        offsetX = -(arrowSize + spacing)
+        arrow.Text = "◀"
+    elseif direction == "right" then
+        offsetX = arrowSize + spacing
+        arrow.Text = "▶"
+    end
+
+    arrow.Position = UDim2.new(centerX, offsetX, centerY, offsetY)
     arrow.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
     arrow.BorderSizePixel = 0
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.Cartoon
     arrow.TextSize = 25
-
-    if direction == "up" then arrow.Text = "▲"
-    elseif direction == "down" then arrow.Text = "▼"
-    elseif direction == "left" then arrow.Text = "◀"
-    elseif direction == "right" then arrow.Text = "▶" end
 
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 8)
@@ -179,7 +196,7 @@ local function createArrow(parent, direction)
     end)
 end
 
--- Criar setas centralizadas na interface de movimentação
+-- Criar setas centralizadas e próximas no HUD
 createArrow(moveFrame, "up")
 createArrow(moveFrame, "down")
 createArrow(moveFrame, "left")
